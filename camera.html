@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Captura INE</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      position: absolute;
+    }
+
+    .frame {
+      position: absolute;
+      width: 85%;
+      height: 55%;
+      border: 3px solid #00ff00;
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+
+    button {
+      padding: 14px 22px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      background: #1976d2;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<video id="video" autoplay playsinline></video>
+<div class="frame"></div>
+
+<div class="controls">
+  <button id="captureBtn">📸 Tomar ANVERSO</button>
+</div>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script src="js/camera-capture.js"></script>
+</body>
+</html>
