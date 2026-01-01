@@ -58,8 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     let data = Object.fromEntries(new FormData(fform));
 
     // Datos globales
-    data.ineAnverso = window.ineAnverso || "";
-    data.ineReverso = window.ineReverso || "";
+	data.ineAnverso = localStorage.getItem("ineAnverso") || "";
+    data.ineReverso = localStorage.getItem("ineReverso") || "";
     data.lat = fform.lat.value || "";
     data.lng = fform.lng.value || "";
     data.fechaRegistro = new Date().toISOString();
