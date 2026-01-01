@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<script>
+  if (localStorage.getItem("logged") !== "true") {
+    window.location.href = "login.html";
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <title>Captura de Datos de Campaña</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+</head>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("Service Worker registrado"))
+      .catch(err => console.error("SW error:", err));
+  }
+</script>
+
+<body>
+
+
+
+<form id="fform">
+ <!-- <input name="municipio" placeholder="Municipio" required> -->
+ 
+ <!-- LOGO -->
+<div class="logo-container">
+<img src="img/logo.png" alt="Logo campaña" class="logo">
+</div>
+<h2>CAMPAÑA 2027</h2>
+  
+  <select name="municipio">
+    <option value="">Municipio</option>
+    <option>Calakmul</option>
+    <option>Calkini</option>
+	<option>Campeche</option>
+    <option>Candelaria</option>
+	<option>Carmen</option>
+    <option>Champoton</option>
+	<option>Dzitbalche</option>
+    <option>Escarcega</option>
+	<option>Hecelchakan</option>
+    <option>Hopelchen</option>
+	<option>Palizada</option>
+    <option>Seybaplaya</option>
+	<option>Tenabo</option>
+  </select>
+
+
+ <input name="dt" placeholder="DT">
+  <input name="seccion" placeholder="Sección">
+  <input name="nivel" placeholder="Nivel líder">
+
+  <input name="nombre" placeholder="Nombre" required>
+  <input name="apellidoP" placeholder="Apellido Paterno" required>
+  <input name="apellidoM" placeholder="Apellido Materno">
+
+  <select name="sexo">
+    <option value="">Sexo</option>
+    <option>Hombre</option>
+    <option>Mujer</option>
+  </select>
+
+  <input name="colonia" placeholder="Colonia">
+  <input name="direccion" placeholder="Dirección">
+  <input type="date" name="fechaNacimiento">
+  <input name="cel" placeholder="Cel / Whatsapp">
+  <input name="facebook" placeholder="Facebook">
+  <input name="ine" placeholder="Clave de elector">
+
+  <h3>UBICACIÓN</h3>
+  <button type="button" id="geoBtn">📍 Ubicación automática</button>
+  <div id="map" style="width: 100%; height: 400px;"></div>
+  <input type="hidden" name="lat">
+  <input type="hidden" name="lng">
+
+<h3>INE</h3>
+
+<video id="video" video
+  id="video"
+  autoplay
+  muted
+  playsinline
+  style="width:100%; border-radius:12px; background:black;">
+  </video>
+
+<br>
+
+<button type="button" id="btnCamara">📷 Activar cámara</button>
+
+
+
+  <button type="submit">💾 Guardar</button>
+  <div id="status" style="margin-top:20px; font-weight:bold;"></div>
+  
+  <button onclick="logout()">🚪 Salir</button>
+
+
+<script>
+function logout(){
+  localStorage.clear();
+  location.href = "login.html";
+}
+</script>
+  
+ 
+ </form>
+ 
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="js/db.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/app.js"></script>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="js/map.js"></script>
+
+
+
+
+</body>
+
+</html>

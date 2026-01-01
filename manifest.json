@@ -1,0 +1,10 @@
+{
+  "name": "Campaña 2027",
+  "short_name": "Campaña",
+  "start_url": "/login.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b5ed7"
+}
+

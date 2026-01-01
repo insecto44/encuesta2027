@@ -1,0 +1,88 @@
+/* RESET BÁSICO */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* CENTRADO TOTAL */
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;      /* vertical */
+  justify-content: center;  /* horizontal */
+  background: #f2f2f2;
+  padding: 16px;
+}
+
+/* CONTENEDOR LOGIN */
+.login-container {
+  width: 100%;
+  max-width: 360px; /* tamaño ideal para celular */
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* LOGO */
+.logo {
+  width: 120px;
+  max-width: 60%;
+  margin-bottom: 16px;
+}
+
+/* TITULO */
+.login-container h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* INPUTS */
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* BOTÓN */
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.2s;
+}
+
+.login-container button:active {
+  transform: scale(0.96);
+  background: #0056b3;
+}
+
+/* MENSAJE ERROR */
+#error {
+  margin-top: 12px;
+  color: red;
+  font-size: 14px;
+}
+
+/* AJUSTES EXTRA PARA CELULAR */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+  }
+
+  .login-container h2 {
+    font-size: 16px;
+  }
+}
