@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const URL = "https://script.google.com/macros/s/AKfycbyDiSQnhBIip-eQJ2M676M0T5-nHKkidC_srAHFVR7f41eKCLhyQYgH2Y3xNA6HT6BXrA/exec";
+  const URL = "hhttps://script.google.com/macros/s/AKfycbwPhL6BLT79Jg0q6UMZMfcTpAEk9Mo08aRbJNCK6GX-LUMMpGiQCXhZt9BQUvJqUlUdvg/exec";
 
   /* ================= DB ================= */
   await window.openDB();
@@ -157,3 +157,4 @@ function reiniciarAppSilencioso() {
 
   console.log("✔ App reiniciada de forma silenciosa");
 }
+
