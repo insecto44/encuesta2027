@@ -117,3 +117,32 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
 });
+/* ================= CAMERA ================= */
+document.getElementById("btnCamara").addEventListener("click", () => {
+
+  const form = document.getElementById("fform");
+  const data = Object.fromEntries(new FormData(form));
+
+  // Guardar formulario temporalmente
+  localStorage.setItem("formTemp", JSON.stringify(data));
+
+  // Ir a la página de cámara
+  window.location.href = "camera.html";
+});
+const temp = localStorage.getItem("formTemp");
+
+if (temp) {
+  const data = JSON.parse(temp);
+  const form = document.getElementById("fform");
+
+  Object.keys(data).forEach(name => {
+    if (form.elements[name]) {
+      form.elements[name].value = data[name];
+    }
+  });
+
+  console.log("✔ Formulario restaurado");
+}
+localStorage.removeItem("formTemp");
+localStorage.removeItem("ineAnverso");
+localStorage.removeItem("ineReverso");
