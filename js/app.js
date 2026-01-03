@@ -129,20 +129,26 @@ document.getElementById("btnCamara").addEventListener("click", () => {
   // Ir a la página de cámara
   window.location.href = "camera.html";
 });
-const temp = localStorage.getItem("formTemp");
 
-if (temp) {
-  const data = JSON.parse(temp);
+
+document.addEventListener("DOMContentLoaded", () => {
+
   const form = document.getElementById("fform");
+  if (!form) return;
 
-  Object.keys(data).forEach(name => {
-    if (form.elements[name]) {
-      form.elements[name].value = data[name];
-    }
-  });
+  const temp = localStorage.getItem("formTemp");
 
-  console.log("✔ Formulario restaurado");
-}
-localStorage.removeItem("formTemp");
-localStorage.removeItem("ineAnverso");
-localStorage.removeItem("ineReverso");
+  if (temp) {
+    const data = JSON.parse(temp);
+
+    Object.keys(data).forEach(name => {
+      if (form.elements[name]) {
+        form.elements[name].value = data[name];
+      }
+    });
+
+    console.log("✔ Formulario restaurado correctamente");
+  }
+
+});
+
