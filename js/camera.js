@@ -1,31 +1,70 @@
+let paso = "anverso";
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const video = document.getElementById("video");
-  const btnCamara = document.getElementById("btnCamara");
+  const canvas = document.getElementById("canvas");
+  const titulo = document.getElementById("titulo");
+  const btn = document.getElementById("btn");
 
-  if (!video || !btnCamara) {
+  if (!video || !canvas || !btn || !titulo) {
     console.error("Elementos de cámara no encontrados");
     return;
   }
 
-  let stream = null;
+  iniciarCamara();
 
-  btnCamara.addEventListener("click", async () => {
+  btn.addEventListener("click", capturar);
+
+  /* ================================
+     🎥 INICIAR CÁMARA
+  ================================ */
+  async function iniciarCamara() {
     try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { exact: "environment" }
-        },
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
         audio: false
       });
-
       video.srcObject = stream;
-      video.play();
-
-    } catch (err) {
-      alert("No se pudo acceder a la cámara");
-      console.error(err);
+    } catch (e) {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+      });
+      video.srcObject = stream;
     }
-  });
+  }
+
+  /* ================================
+     📸 CAPTURA
+  ================================ */
+  function capturar() {
+
+    // Proporción INE horizontal
+    canvas.width = 420;
+    canvas.height = 270;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const img = canvas.toDataURL("image/jpeg", 0.9);
+
+    if (paso === "anverso") {
+      localStorage.setItem("ineAnverso", img);
+      paso = "reverso";
+      titulo.textContent = "INE – REVERSO";
+      alert("Ahora captura el REVERSO");
+    } else {
+      localStorage.setItem("ineReverso", img);
+      detenerCamara();
+      window.location.href = "index.html";
+    }
+  }
+
+  function detenerCamara() {
+    if (video.srcObject) {
+      video.srcObject.getTracks().forEach(t => t.stop());
+    }
+  }
 
 });

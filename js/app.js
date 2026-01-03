@@ -1,4 +1,41 @@
+/* =================================================
+   🔎 DETECTAR ENTORNO (LOCALHOST / PRODUCCIÓN)
+================================================= */
+function isLocalhost() {
+  return (
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1"
+  );
+}
+
+/* =================================================
+   📤 ENVÍO INTELIGENTE (EVITA CORS)
+================================================= */
+async function enviarDatos(data) {
+  const URL = "https://script.google.com/macros/s/AKfycbzk0WZDVD_L7hEnslwPp3Gn7NMHKe173K1PIxVMPnF9kGExF5Xn2XpGXrxJrsFM_2bpjA/exec";
+
+  const options = isLocalhost()
+    ? {
+        method: "POST",
+        body: JSON.stringify(data)
+      }
+    : {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      };
+
+  const resp = await fetch(URL, options);
+  if (!resp.ok) throw new Error("Error en envío");
+  return resp.text();
+}
+
+/* =================================================
+   🚀 APP PRINCIPAL
+================================================= */
 document.addEventListener("DOMContentLoaded", async () => {
+
+
 
   const fform = document.getElementById("fform");
   const statusDiv = document.getElementById("status");
@@ -7,8 +44,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Formulario o status no encontrado");
     return;
   }
-
-  const URL = "hhttps://script.google.com/macros/s/AKfycbwPhL6BLT79Jg0q6UMZMfcTpAEk9Mo08aRbJNCK6GX-LUMMpGiQCXhZt9BQUvJqUlUdvg/exec";
 
   /* ================= DB ================= */
   await window.openDB();
@@ -20,28 +55,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   updateStatus();
-  window.addEventListener("online", sendPendingRecords);
+  window.addEventListener("online", enviarPendientes);
   window.addEventListener("offline", updateStatus);
 
   /* ================= SYNC ================= */
-  async function sendPendingRecords() {
+  async function enviarPendientes() {
     const records = await getAllRecords();
-
     if (!records.length) return;
 
     statusDiv.textContent = "🔄 Enviando datos pendientes...";
 
     for (const rec of records) {
       try {
-        await fetch(URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(rec)
-        });
+        await enviarDatos(rec);
       } catch (err) {
-        console.error("Error al enviar registro pendiente", err);
+        console.error("Error sincronizando:", err);
         statusDiv.textContent = "❌ Error al sincronizar";
         return;
       }
@@ -54,14 +82,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* ================= SUBMIT ================= */
   fform.addEventListener("submit", async (e) => {
     e.preventDefault();
+	
+	
 
     let data = Object.fromEntries(new FormData(fform));
 
     // Datos globales
-	data.ineAnverso = localStorage.getItem("ineAnverso") || "";
-    data.ineReverso = localStorage.getItem("ineReverso") || "";
-    data.lat = fform.lat.value || "";
-    data.lng = fform.lng.value || "";
+    data.ineAnverso = window.ineAnverso || "";
+    data.ineReverso = window.ineReverso || "";
+    data.lat = fform.lat?.value || "";
+    data.lng = fform.lng?.value || "";
     data.fechaRegistro = new Date().toISOString();
 
     // Validación mínima
@@ -70,91 +100,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Convertir a MAYÚSCULAS
-    Object.keys(data).forEach(k => {
-      if (typeof data[k] === "string") {
-        data[k] = data[k].toUpperCase();
-      }
-    });
-
     try {
       if (navigator.onLine) {
-
-        await fetch(URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(data)
-        });
-
-        alert("Datos enviados correctamente ✔");
-
+        await enviarDatos(data);
+        statusDiv.textContent = "✅ Datos enviados";
       } else {
-
-        await addRecord(data);
-        alert("Sin internet: datos guardados localmente ✔");
-
+        await saveRecord(data);
+        statusDiv.textContent = "💾 Guardado localmente (offline)";
       }
-
-      reiniciarAppSilencioso();
-
+      fform.reset();
     } catch (err) {
-      console.error("Error al guardar:", err);
-      alert("Error al guardar datos");
+      console.error(err);
+      await saveRecord(data);
+      statusDiv.textContent = "⚠️ Guardado local por error de red";
     }
   });
 
 });
-
-/* =================================================
-   🔄 REINICIO SILENCIOSO DE LA APP
-================================================= */
-function reiniciarAppSilencioso() {
-
-  const form = document.getElementById("fform");
-  const status = document.getElementById("status");
-
-  if (!form) return;
-
-  // Reset formulario
-  form.reset();
-
-  // Limpiar lat / lng
-  if (form.lat) form.lat.value = "";
-  if (form.lng) form.lng.value = "";
-
-  // Limpiar variables globales
-  window.ineAnverso = "";
-  window.ineReverso = "";
-
-  // Limpiar mapa
-  if (window.map && window.marker) {
-    window.map.removeLayer(window.marker);
-    window.marker = null;
-  }
-
-  if (window.map && window.accuracyCircle) {
-    window.map.removeLayer(window.accuracyCircle);
-    window.accuracyCircle = null;
-  }
-
-  // Volver mapa a vista inicial
-  if (window.map) {
-    window.map.setView([19.845, -90.523], 13);
-  }
-
-  // Limpiar canvas INE
-  const canvas = document.getElementById("canvas");
-  if (canvas) {
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    canvas.style.display = "none";
-  }
-
-  // Limpiar mensaje
-  if (status) status.textContent = "";
-
-  console.log("✔ App reiniciada de forma silenciosa");
-}
-
