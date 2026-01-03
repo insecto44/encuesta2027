@@ -99,12 +99,7 @@
   <!-- <input type="date" name="Fecha de Nacimiento">-->
   
   <label for="fechaNacimiento">Fecha de nacimiento</label>
-<input 
-  type="date" 
-  id="fechaNacimiento" 
-  name="fechaNacimiento" 
-  required
->
+<input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
 
   <input name="cel" placeholder="Cel / Whatsapp">
   <input name="facebook" placeholder="Facebook">
@@ -120,8 +115,9 @@
 
 <button type="button" onclick="abrirCamara()">📷 Capturar fotos de la INE</button>
 
-  <button type="submit">💾 Guardar</button>
-  <<script>
+<button type="submit">💾 Guardar</button>
+
+ <script>
 function abrirCamara(){
   window.location.href = "camera.html";
 }
